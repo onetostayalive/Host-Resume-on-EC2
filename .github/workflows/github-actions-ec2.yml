@@ -1,15 +1,18 @@
 name: Push-to-EC2
 
-# Trigger deployment only on push to main branch
+# Trigger deployment only on push to staging branch
 on:
   push:
     branches:
-      - main
+      - staging
 
 jobs:
   deploy:
-    name: Deploy to EC2 on master branch push
+    name: Deploy to EC2 on staging branch push
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 20.x]
 
     steps:
       - name: Checkout the files
@@ -34,5 +37,5 @@ jobs:
             sudo apt-get install -y apache2
             sudo systemctl start apache2
             sudo systemctl enable apache2
-            cd home
+            cd /home
             sudo mv * /var/www/html
